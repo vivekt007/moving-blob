@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move Circle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url(images/edit1.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top;
+            backdrop-filter: blur(8px);
+            display: grid;
+            place-items: center;
+        }
+
+        section {
+            width: 100%;
+            height: 100dvh;
+        }
+
+        .circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            background: radial-gradient(circle at 50% 50%, rgba(76, 0, 255, 1), rgba(76, 0, 255, 0));
+
+            --xA: 10px;
+            --yA: 10px;
+            --xB: 30px;
+            --yB: 30px;
+
+            animation-name: moveCircle;
+            animation-duration: .5s;
+            animation-iteration-count: 1;
+            animation-timing-function: cubic-bezier(.17, .67, .4, 1.31);
+        }
+
+        @keyframes moveCircle {
+            0% {
+                transform: translate3d(var(--xA), var(--yA), 0);
+            }
+
+            100% {
+                transform: translate3d(var(--xB), var(--yB), 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blob">
+        <div class="circle"></div>
+      </div>
+
+    <section class="one"></section>
+    <section class="two"></section>
+    <section class="three"></section>
+    <section class="four"></section>
+
+    <script>
+        let container = document.querySelector(".blob");
+        container.addEventListener("animationend", changePosition, true);
+
+        function changePosition(event) {
+            let circle = event.target;
+
+            circle.style.animationName = "none";
+
+            requestAnimationFrame(() => {
+                circle.style.animationName = "";
+            });
+
+            let circleStyle = getComputedStyle(circle);
+            let finalX = circleStyle.getPropertyValue("--xB");
+            let finalY = circleStyle.getPropertyValue("--yB");
+
+            circle.style.setProperty("--xA", finalX);
+            circle.style.setProperty("--yA", finalY);
+
+            circle.style.setProperty("--xB", getRandomNumber(-800, 800) + "px");
+            circle.style.setProperty("--yB", getRandomNumber(-800, 800) + "px");
+
+            console.log(circle);
+        }
+
+        function getRandomNumber(low, high) {
+            let r = Math.floor(Math.random() * (high - low + 1)) + low;
+            return r;
+        }
+    </script>
+</body>
+
+</html>
